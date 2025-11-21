@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登入</title>
+    <link rel="stylesheet" href="styie.css">
+
+    <style>
+        /* 專門用於狀態訊息的樣式 */
+        #login-message {
+            margin-top: 10px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .message-success {
+            color: #10B981;
+        }
+
+        /* 綠色 */
+        .message-error {
+            color: #F87171;
+        }
+
+        /* 紅色 */
+        .message-info {
+            color: #60A5FA;
+        }
+
+        /* 藍色 */
+    </style>
+</head>
+
+<body>
+
+    <div class="shell">
+        <h2 class="title">請登入</h2>
+
+        <input type="text" id="username" placeholder="使用者名稱">
+        <input type="password" id="password" placeholder="密碼">
+
+        <input type="submit" value="登入" id="loginBtn">
+
+        <div id="login-message"></div>
+
+        <div class="footer">
+            <div class="Remember">
+                <input type="checkbox" id="rememberMe">
+                <label for="rememberMe">記住我</label>
+            </div>
+            <button id="Password">註冊帳號</button>
+        </div>
+
+        <p style="text-align: center; margin-top: 20px;">
+            <a href="../" style="color: #60A5FA; text-decoration: underline; font-size: 0.9em;"
+                onmouseover="this.style.color='#1E40AF'" onmouseout="this.style.color='#60A5FA'">
+                回首頁
+            </a>
+        </p>
+    </div>
+
+
+    <script type="module">
+        // -------------------------------------------------------------
+        // 1. 導入模組與服務初始化
+        // -------------------------------------------------------------
+
+        // 導入 Firebase 核心功能
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
+        // 導入 Auth 和 Firestore 模組
+        import {
+            getAuth,
+            signInWithEmailAndPassword,
+            signOut,
+            onAuthStateChanged,
+            setPersistence,
+            browserLocalPersistence,
+            browserSessionPersistence
+        } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
+
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+
+        // 您的 Web App Firebase 配置 (從組合版複製)
+        const firebaseConfig = {
+            apiKey: "AIzaSyCtbjdi-x3E3eNgX8WvBtgibOTRG4idny4",
+            authDomain: "workai-1d692.firebaseapp.com",
+            projectId: "workai-1d692",
+            storageBucket: "workai-1d692.firebasestorage.app",
+            messagingSenderId: "156453625217",
+            appId: "1:156453625217:web:f04e2da964ddb6d449dc80",
+            measurementId: "G-71NV0L4CGS"
+        };
+
+        // 初始化 Firebase App
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // 元素獲取
+        const emailInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        const loginBtn = document.getElementById('loginBtn');
+        const signupBtn = document.getElementById('Password');
+        const messageDiv = document.getElementById('login-message');
+        const rememberMeCheckbox = document.getElementById('rememberMe');
+
+        // 輔助函式和權限函式
+        function showMessage(msg, type = 'info') {
+            messageDiv.textContent = msg;
+            messageDiv.className = '';
+            messageDiv.classList.add(`message-${type}`);
+        }
+
+        const getUserRole = async (user) => {
+            if (!user) return null;
+            try {
+                const userRef = doc(db, "users", user.uid);
+                const userSnap = await getDoc(userRef);
+                return userSnap.exists() ? (userSnap.data().role || 'user') : 'user';
+            } catch (error) {
+                console.error("讀取用戶角色失敗:", error);
+                return 'user';
+            }
+        };
+
+        // -------------------------------------------------------------
+        // 2. 登入頁面初始化：載入儲存的電子郵件
+        // -------------------------------------------------------------
+        const initializeLogin = () => {
+            const savedEmail = localStorage.getItem('rememberedEmail');
+            if (savedEmail) {
+                emailInput.value = savedEmail;
+                rememberMeCheckbox.checked = true;
+            } else {
+                // 如果沒有儲存的郵件，確保記住我也不勾選
+                rememberMeCheckbox.checked = false;
+            }
+        };
+
+        // -------------------------------------------------------------
+        // 3. 登入操作 (核心修正：提早處理 localStorage)
+        // -------------------------------------------------------------
+
+        const handleLogin = async () => {
+            const email = emailInput.value;
+            const password = passwordInput.value;
+            const rememberMe = rememberMeCheckbox.checked;
+
+            if (!email || !password) {
+                showMessage('電子郵件和密碼不能為空。', 'error');
+                return;
+            }
+
+            showMessage('登入中...', 'info');
+            loginBtn.disabled = true;
+
+            // *** 核心修正點：在嘗試登入前，根據最新的「記住我」選項更新 localStorage ***
+            // 這樣可以保證，無論登入成功或失敗，如果用戶取消了勾選，上次儲存的郵箱都會被清除。
+            if (rememberMe) {
+                localStorage.setItem('rememberedEmail', email);
+            } else {
+                localStorage.removeItem('rememberedEmail');
+            }
+            // *************************************************************
+
+
+            try {
+                // 設定 Firebase 登入狀態的持續性
+                const persistenceType = rememberMe ? browserLocalPersistence : browserSessionPersistence;
+                await setPersistence(auth, persistenceType);
+
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+                if (!user.emailVerified) {
+                    // 如果未驗證，先登出並提示
+                    await signOut(auth);
+                    showMessage('登入失敗！請先檢查您的電子郵件並完成驗證。', 'error');
+                    return;
+                }
+
+                const role = await getUserRole(user);
+
+                // 由於 localStorage 已在上方處理，這裡不需要重複處理郵件儲存
+
+                showMessage(`登入成功！(${role}) 正在跳轉...`, 'success');
+
+                // 跳轉到上層資料夾的 user
+                setTimeout(() => {
+                    window.location.href = '../user';
+                }, 1000);
+
+            } catch (error) {
+                loginBtn.disabled = false;
+                let displayMessage = '登入失敗。';
+                // ... 錯誤處理邏輯略
+                switch (error.code) {
+                    case 'auth/user-not-found':
+                    case 'auth/wrong-password':
+                        displayMessage = '電子郵件或密碼錯誤。';
+                        break;
+                    case 'auth/too-many-requests':
+                        displayMessage = '嘗試次數過多，請稍後再試。';
+                        break;
+                    case 'auth/invalid-email':
+                        displayMessage = '電子郵件格式不正確。';
+                        break;
+                    default:
+                        console.error("登入錯誤:", error);
+                }
+                showMessage(`登入失敗：${displayMessage}`, 'error');
+            }
+        };
+
+        // -------------------------------------------------------------
+        // 4. 事件監聽器
+        // -------------------------------------------------------------
+        loginBtn.addEventListener('click', handleLogin);
+
+        // 註冊按鈕連結到 ../signup/
+        signupBtn.addEventListener('click', () => {
+            window.location.href = '../signup/';
+        });
+
+        // -------------------------------------------------------------
+        // 5. 狀態檢查與初始化 (已登入自動跳轉)
+        // -------------------------------------------------------------
+
+        // 檢查是否有持續的登入狀態
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // 偵測到 Firebase 已儲存的登入狀態
+                console.log("偵測到已登入狀態，自動跳轉至後台...");
+                showMessage("偵測到已登入狀態，自動跳轉...", 'success');
+
+                if (user.emailVerified) {
+                    // 延遲跳轉以顯示訊息 (100ms)
+                    setTimeout(() => {
+                        window.location.href = '../user';
+                    }, 100);
+                } else {
+                    // 如果狀態存在但未驗證，則清空狀態，讓用戶重新登入
+                    signOut(auth).then(() => {
+                        initializeLogin();
+                    });
+                }
+
+            } else {
+                // 沒有登入狀態，正常載入登入表單的初始化
+                initializeLogin();
+            }
+        });
+
+    </script>
+
+</body>
+
+</html>

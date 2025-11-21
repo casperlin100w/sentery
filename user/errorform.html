@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>軟體錯誤回報表單</title>
+    <style>
+        /* 保持原來的樣式 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        form {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        textarea {
+            resize: vertical;
+            height: 150px;
+        }
+
+        input[type="submit"] {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        .required::after {
+            content: " *";
+            color: red;
+        }
+
+        /* 新增成功訊息的樣式 */
+        #success-message {
+            max-width: 600px;
+            margin: auto;
+            padding: 40px;
+            text-align: center;
+            border: 2px solid #28a745;
+            border-radius: 8px;
+            background-color: #e2f0e3;
+            color: #155724;
+            display: none;
+            /* 預設隱藏 */
+        }
+
+        #success-message h2 {
+            margin-top: 0;
+            color: #28a745;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="success-message">
+        <h2>🎉 錯誤回報成功！</h2>
+        <p>感謝您的寶貴回報！我們已收到您的資訊並會盡快處理。</p>
+        <p>我們會透過您提供的 Email 保持聯繫。</p>
+    </div>
+
+    <form id="bug-report-form" onsubmit="handleFormSubmit(event)">
+        <h1>🐞 軟體錯誤回報</h1>
+        <p>請盡可能詳細地填寫以下資訊，這將有助於我們更快地修復錯誤。標記 <span style="color:red;">*</span> 的欄位為必填。</p>
+
+        <fieldset>
+            <legend>
+                <h3>聯絡資訊</h3>
+            </legend>
+            <label for="name" class="required">您的姓名/暱稱：</label>
+            <input type="text" id="name" name="reporter_name" required>
+
+            <label for="email" class="required">電子郵件 (Email)：</label>
+            <input type="email" id="email" name="reporter_email" required>
+        </fieldset>
+
+        <input type="submit" value="送出錯誤回報">
+    </form>
+
+    <script>
+        // 核心 JavaScript 邏輯
+        function handleFormSubmit(event) {
+            // 1. 阻止表單的預設提交行為 (避免頁面跳轉)
+            event.preventDefault();
+
+            // 2. 執行基本的驗證 (例如檢查 email 欄位)
+            const form = document.getElementById('bug-report-form');
+            if (!form.checkValidity()) {
+                // 如果瀏覽器內建的驗證失敗，讓它顯示錯誤
+                form.reportValidity();
+                return;
+            }
+
+            // 3. (未來：將數據發送到後端)
+            // 在您決定後端方案後，您的數據發送程式碼會放在這裡
+
+            // 4. 顯示成功訊息並隱藏表單
+            const formElement = document.getElementById('bug-report-form');
+            const successElement = document.getElementById('success-message');
+
+            formElement.style.display = 'none'; // 隱藏表單
+            successElement.style.display = 'block'; // 顯示成功訊息
+
+            // (可選) 在這裡可以將收集到的數據列印到控制台，以便開發者查看
+            const formData = new FormData(form);
+            for (let pair of formData.entries()) {
+                console.log(pair[0] + ': ' + pair[1]);
+            }
+        }
+    </script>
+
+</body>
+
+</html>

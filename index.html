@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>星崔AI</title>
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+    <div id="follower-ball"></div>
+    <div class="shell">
+
+        <header>
+
+            <button class="menu">&#9776;</button>
+
+
+            <h1>星崔AI</h1>
+
+            <nav>
+                <ul class="show">
+                    <li><a href="introduce/">系統介紹</a></li>
+                    <li><a href="about/">關於我們</a></li>
+                    <li><a href="login/">登入</a></li>
+                </ul>
+            </nav>
+
+        </header>
+
+        <main>
+            <section class="a">
+                <h2>智慧姿勢矯正與專注力提升</h2>
+                <p>坐得對，學得快：智慧姿勢優化，專注力自然飆升。</p>
+                <img src="#" alt="圖片名稱">
+            </section>
+
+            <section class="b">
+                <h2>智慧姿勢矯正與專注力提升是什麼？</h2>
+                <p>您的肩頸疼痛，很可能是姿勢不良造成的。別再讓錯誤的坐姿偷走您的精力！我們的智慧系統能悄悄地在背景為您守護健康，讓您專注於工作，而非痠痛。投入一次，享受長期的健康與高效率。</p>
+                <img src="#" alt="圖片名稱">
+            </section>
+
+            <section class="c">
+                <h2>它是如何運作的？</h2>
+                <p>我們的系統透過先進的感測或視覺技術，能即時偵測您的坐姿。一旦發現您開始駝背、前傾或側坐，它會以溫和、非干擾的方式（例如：微震動、視覺提示或語音提醒）引導您回到正確的姿勢。</p>
+            </section>
+
+            <section class="e">
+                <h2>能為您帶來什麼好處？</h2>
+                <li>矯正身體習慣： 從根本上改善您的姿勢，預防因久坐不當而引起的肩頸痠痛和疲勞。</li>
+                <li>提升學習/工作效率： 研究證明，正確的姿勢有助於血液循環和氧氣供應，能自然提升您的專注度和記憶力。當系統偵測到您長時間分心或離開時，也會給予適當提示，幫助您快速回到「心流」狀態。</li>
+            </section>
+
+            <section class="d">
+
+                <a href="login/" class="login-button">
+                    登入
+                </a>
+            </section>
+        </main>
+
+        <footer>
+            <p>版權等等2025</p>
+        </footer>
+
+
+        <script src="script.js"></script>
+
+        <script type="module" src="firebase-config.js">
+            // Import the functions you need from the SDKs you need
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
+            import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-analytics.js";
+            // TODO: Add SDKs for Firebase products that you want to use
+            // https://firebase.google.com/docs/web/setup#available-libraries
+
+            // Your web app's Firebase configuration
+            // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+            const firebaseConfig = {
+                apiKey: "AIzaSyCtbjdi-x3E3eNgX8WvBtgibOTRG4idny4",
+                authDomain: "workai-1d692.firebaseapp.com",
+                projectId: "workai-1d692",
+                storageBucket: "workai-1d692.firebasestorage.app",
+                messagingSenderId: "156453625217",
+                appId: "1:156453625217:web:7ef3a3642481c52449dc80",
+                measurementId: "G-4XPYJZMRL0"
+            };
+
+            // Initialize Firebase
+            const app = initializeApp(firebaseConfig);
+            const analytics = getAnalytics(app);
+        </script>
+    </div>
+
+</body>
+
+</html>

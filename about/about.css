@@ -1,0 +1,36 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+/* 磨砂質感 */
+body{
+    background-image: url(紫海.png);
+    background-size: cover;
+    background-attachment: fixed;
+    background-color: #0d0d41;
+}
+.shell{
+    background:rgba(55, 54, 54, 0.414);
+    backdrop-filter: blur(2px);
+    border: 1px solid rgb(255, 255, 255);    
+}
+
+header {
+  background-color: rgba(10, 3, 20, 0.852);
+  height: 10px; /* 調整高度以顯示內容 */
+  width: 100%;
+  position: fixed;
+  z-index: 10;
+}
+header , section ,footer {
+    padding: 40px;
+}
+
+/* 核心置中樣式: 對 main 容器設定最大寬度並自動左右邊距 */
+main {
+    max-width: 1200px; /* 根據您的設計設定最大寬度，避免在超寬螢幕上拉得太開 */
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 80px; /* 讓內容避開 fixed 的 header */
+    width: 100%; /* 確保在小螢幕上可以佔滿寬度 */
+}
