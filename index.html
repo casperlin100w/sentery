@@ -1,99 +1,211 @@
 <!DOCTYPE html>
-<html lang="TW">
+<html lang="zh-TW">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>星崔AI</title>
-    <link rel="stylesheet" href="style.css">
+    <title>星崔 AI | 網站轉移中</title>
+    <style>
+        :root {
+            --primary-color: #00f2ff;
+            --accent-color: #7000ff;
+            --bg-color: #0a0a0c;
+        }
 
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: var(--bg-color);
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+
+        /* 背景 Canvas */
+        #canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            background: rgba(20, 20, 25, 0.8);
+            padding: 3rem;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 242, 255, 0.3);
+            box-shadow: 0 0 50px rgba(0, 242, 255, 0.1);
+            backdrop-filter: blur(10px);
+            max-width: 90%;
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin: 0 0 1.5rem 0;
+            letter-spacing: 2px;
+            background: linear-gradient(90deg, #fff, var(--primary-color), #fff);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 3s linear infinite;
+        }
+
+        .url-box {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: bold;
+            display: block;
+            margin: 1rem 0;
+            font-size: 1.2rem;
+            text-shadow: 0 0 10px rgba(0, 242, 255, 0.5);
+            transition: 0.3s;
+        }
+
+        .url-box:hover {
+            color: white;
+            text-shadow: 0 0 20px var(--primary-color);
+        }
+
+        .timer-text {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 2rem;
+        }
+
+        #countdown {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            display: block;
+            margin-top: 0.5rem;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        /* Footer 樣式 */
+        footer {
+            position: absolute;
+            bottom: 20px;
+            z-index: 1;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.4);
+            letter-spacing: 1px;
+            text-align: center;
+        }
+
+        @keyframes shine {
+            to {
+                background-position: 200% center;
+            }
+        }
+
+        .container::before {
+            content: " ";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
+            background-size: 100% 4px;
+            pointer-events: none;
+            border-radius: 20px;
+        }
+    </style>
 </head>
 
 <body>
-    <div id="follower-ball"></div>
-    <div class="shell">
 
-        <header>
+    <canvas id="canvas"></canvas>
 
-            <button class="menu">&#9776;</button>
+    <div class="container">
+        <h1>星崔 AI 系統通知</h1>
+        <p>網站已經成功轉移至新座標</p>
+        <a href="https://thesentryai.github.io" class="url-box">thesentryai.github.io</a>
 
-
-            <h1>星崔AI</h1>
-
-            <nav>
-                <ul class="show">
-                    <li><a href="introduce/">系統介紹</a></li>
-                    <li><a href="about/">關於我們</a></li>
-                    <li><a href="login/">登入</a></li>
-                </ul>
-            </nav>
-
-        </header>
-
-        <main>
-            <section class="a">
-                <h2>智慧姿勢矯正與專注力提升</h2>
-                <p>坐得對，學得快：智慧姿勢優化，專注力自然飆升。</p>
-                <img src="#" alt="圖片名稱">
-            </section>
-
-            <section class="b">
-                <h2>智慧姿勢矯正與專注力提升是什麼？</h2>
-                <p>您的肩頸疼痛，很可能是姿勢不良造成的。別再讓錯誤的坐姿偷走您的精力！我們的智慧系統能悄悄地在背景為您守護健康，讓您專注於工作，而非痠痛。投入一次，享受長期的健康與高效率。</p>
-                <img src="#" alt="圖片名稱">
-            </section>
-
-            <section class="c">
-                <h2>它是如何運作的？</h2>
-                <p>我們的系統透過先進的感測或視覺技術，能即時偵測您的坐姿。一旦發現您開始駝背、前傾或側坐，它會以溫和、非干擾的方式（例如：微震動、視覺提示或語音提醒）引導您回到正確的姿勢。</p>
-            </section>
-
-            <section class="e">
-                <h2>能為您帶來什麼好處？</h2>
-                <li>矯正身體習慣： 從根本上改善您的姿勢，預防因久坐不當而引起的肩頸痠痛和疲勞。</li>
-                <li>提升學習/工作效率： 研究證明，正確的姿勢有助於血液循環和氧氣供應，能自然提升您的專注度和記憶力。當系統偵測到您長時間分心或離開時，也會給予適當提示，幫助您快速回到「心流」狀態。</li>
-            </section>
-
-            <section class="d">
-
-                <a href="login/" class="login-button">
-                    登入
-                </a>
-            </section>
-        </main>
-
-        <footer>
-            <p>版權等等2025</p>
-        </footer>
-
-
-        <script src="script.js"></script>
-
-        <script type="module" src="firebase-config.js">
-            // Import the functions you need from the SDKs you need
-            import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
-            import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-analytics.js";
-            // TODO: Add SDKs for Firebase products that you want to use
-            // https://firebase.google.com/docs/web/setup#available-libraries
-
-            // Your web app's Firebase configuration
-            // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-            const firebaseConfig = {
-                apiKey: "AIzaSyCtbjdi-x3E3eNgX8WvBtgibOTRG4idny4",
-                authDomain: "workai-1d692.firebaseapp.com",
-                projectId: "workai-1d692",
-                storageBucket: "workai-1d692.firebasestorage.app",
-                messagingSenderId: "156453625217",
-                appId: "1:156453625217:web:7ef3a3642481c52449dc80",
-                measurementId: "G-4XPYJZMRL0"
-            };
-
-            // Initialize Firebase
-            const app = initializeApp(firebaseConfig);
-            const analytics = getAnalytics(app);
-        </script>
+        <div class="timer-text">
+            傳送門將在 <span id="countdown">5</span> 秒後啟動
+        </div>
     </div>
 
+    <footer>
+        © The Sentry AI • All Right Reserved.
+    </footer>
+
+    <script>
+        // 跳轉邏輯
+        const targetUrl = "https://thesentryai.github.io";
+        let seconds = 5;
+        const countdownEl = document.getElementById('countdown');
+
+        const timer = setInterval(() => {
+            seconds--;
+            if (seconds >= 0) countdownEl.textContent = seconds;
+            if (seconds <= 0) {
+                clearInterval(timer);
+                window.location.href = targetUrl;
+            }
+        }, 1000);
+
+        // 背景粒子動畫
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function initCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        class Particle {
+            constructor() { this.reset(); }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2;
+                this.speedX = (Math.random() - 0.5) * 0.4;
+                this.speedY = (Math.random() - 0.5) * 0.4;
+                this.color = Math.random() > 0.5 ? '#00f2ff' : '#7000ff';
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) this.reset();
+            }
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < 80; i++) particles.push(new Particle());
+
+        function animate() {
+            ctx.fillStyle = 'rgba(10, 10, 12, 0.15)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', initCanvas);
+        initCanvas();
+        animate();
+    </script>
 </body>
 
 </html>
